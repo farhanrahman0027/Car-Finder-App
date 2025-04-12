@@ -32,15 +32,15 @@ The **Car Finder App** is a web application designed to help users find and expl
 
 ### Homepage
 
-![Home Page](../assets/screenshots/homepage.png)
+![Home Page](assets/screenshots/homepage.png)
 
-### Car List 
+### Car List
 
-![Car List](../assets/screenshots/car-list.png)
+![Car List](assets/screenshots/car-list.png)
 
 ### Car Details Page
 
-![Car Details](../assets/screenshots/car-detail.png)
+![Car Details](assets/screenshots/car-detail.png)
 
 ---
 
