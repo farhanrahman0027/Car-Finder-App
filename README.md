@@ -1,12 +1,51 @@
-# React + Vite
+# Car Finder App 🚗
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The **Car Finder App** is a web application designed to help users find and explore cars based on various filters like brand, fuel type, and price range. With an intuitive user interface, users can browse a wide selection of cars, view their details, and even save their favorites for later. Whether you're a first-time car buyer or just exploring, this app makes it easy to search and compare cars based on your preferences.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features ✨
+- **Car Search & Filters**: Search cars by brand, fuel type, and price range.
+- **Sort Cars by Price**: Sort cars from lowest to highest or vice versa.
+- **Car Details**: View detailed information about each car.
+- **Responsive UI**: Fully responsive for both mobile and desktop.
+- **Dark Mode**: Toggle between light and dark themes for a better experience.
+- **Wishlist**: Save your favorite cars for easy access later.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack 💻
+
+- **Frontend**:
+  - React
+  - Tailwind CSS
+  - Framer Motion
+  - React Router (for routing)
+  - Lucide React (for icons)
+
+- **Backend** :
+  - Mock data (or connect to a real backend with APIs)
+
+---
+
+## Screenshots 📸
+
+### Homepage
+
+![Home Page](./assets/screenshots/homepage.png)
+
+### Car List 
+
+![Car List](./assets/screenshots/car list.png)
+
+### Car Details Page
+
+![Car Details](./assets/screenshots/car detail.png)
+
+---
+
+## Installation 🛠️
+
+### 1. Clone the repository:
+```bash
+git clone https://github.com/farhanrahman0027/car-finder-app.git
