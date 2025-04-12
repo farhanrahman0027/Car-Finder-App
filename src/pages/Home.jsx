@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import mockCars from "../data/mockCars";
 import CarCard from "../components/CarCard";
-import Wishlist from "../components/Wishlist";
+import { motion } from 'framer-motion';
 
 const Home = () => {
   const [cars, setCars] = useState([]);
@@ -12,79 +12,108 @@ const Home = () => {
     maxPrice: "",
   });
   const [sortOrder, setSortOrder] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
   const carsPerPage = 10;
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    let filtered = mockCars;
+    setLoading(true);
+    setError(null);
 
-    if (filters.brand) {
-      filtered = filtered.filter(
-        (car) => car.brand.toLowerCase() === filters.brand.toLowerCase()
-      );
-    }
-    if (filters.fuel) {
-      filtered = filtered.filter(
-        (car) => car.fuel.toLowerCase() === filters.fuel.toLowerCase()
-      );
-    }
-    if (filters.minPrice) {
-      filtered = filtered.filter(
-        (car) => car.price >= Number(filters.minPrice)
-      );
-    }
-    if (filters.maxPrice) {
-      filtered = filtered.filter(
-        (car) => car.price <= Number(filters.maxPrice)
-      );
-    }
+    const timeout = setTimeout(() => {
+      try {
+        let filtered = mockCars;
 
-    if (sortOrder === "lowToHigh") {
-      filtered.sort((a, b) => a.price - b.price);
-    } else if (sortOrder === "highToLow") {
-      filtered.sort((a, b) => b.price - a.price);
-    }
+        if (filters.brand) {
+          filtered = filtered.filter(
+            (car) => car.brand.toLowerCase() === filters.brand.toLowerCase()
+          );
+        }
+        if (filters.fuel) {
+          filtered = filtered.filter(
+            (car) => car.fuel.toLowerCase() === filters.fuel.toLowerCase()
+          );
+        }
+        if (filters.minPrice) {
+          filtered = filtered.filter(
+            (car) => car.price >= Number(filters.minPrice)
+          );
+        }
+        if (filters.maxPrice) {
+          filtered = filtered.filter(
+            (car) => car.price <= Number(filters.maxPrice)
+          );
+        }
 
-    // Pagination logic
-    const start = (currentPage - 1) * carsPerPage;
-    const paginated = filtered.slice(start, start + carsPerPage);
+        if (sortOrder === "lowToHigh") {
+          filtered.sort((a, b) => a.price - b.price);
+        } else if (sortOrder === "highToLow") {
+          filtered.sort((a, b) => b.price - a.price);
+        }
 
-    setCars(paginated);
+        const start = (currentPage - 1) * carsPerPage;
+        const paginated = filtered.slice(start, start + carsPerPage);
+
+        setCars(paginated);
+      } catch (err) {
+        setError("Failed to load cars.");
+      } finally {
+        setLoading(false);
+      }
+    }, 600);
+
+    return () => clearTimeout(timeout);
   }, [filters, sortOrder, currentPage]);
 
   const handleChange = (e) => {
-    setCurrentPage(1); // 👈 resets to page 1 when filters are changed
-
-    setFilters({
-      ...filters,
-      [e.target.name]: e.target.value,
-    });
+    setCurrentPage(1);
+    setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
   return (
-    <div className="p-4 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4 text-center">Car Finder App</h1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto"
+    >
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-center">
+      Discover Cars That Match Your Lifestyle.
+      </h1>
 
-      <div className="mb-4 flex justify-end">
-        <label className="font-medium mr-2">Sort by Price:</label>
+      {/* Sort Dropdown */}
+      <motion.div
+        className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <label className="font-medium">Sort by Price:</label>
         <select
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
-          className="p-2 border rounded"
+          className="p-2 border rounded w-full sm:w-[200px]"
         >
           <option value="">None</option>
           <option value="lowToHigh">Low to High</option>
           <option value="highToLow">High to Low</option>
         </select>
-      </div>
+      </motion.div>
+
       {/* Filters */}
-      <div className="grid md:grid-cols-4 gap-4 mb-6">
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <input
           type="text"
           name="brand"
           placeholder="Brand (e.g. Tesla)"
-          className="p-2 border rounded"
+          className="p-2 border rounded w-full"
           value={filters.brand}
           onChange={handleChange}
         />
@@ -92,7 +121,7 @@ const Home = () => {
           type="text"
           name="fuel"
           placeholder="Fuel Type (e.g. Petrol)"
-          className="p-2 border rounded"
+          className="p-2 border rounded w-full"
           value={filters.fuel}
           onChange={handleChange}
         />
@@ -100,7 +129,7 @@ const Home = () => {
           type="number"
           name="minPrice"
           placeholder="Min Price"
-          className="p-2 border rounded"
+          className="p-2 border rounded w-full"
           value={filters.minPrice}
           onChange={handleChange}
         />
@@ -108,45 +137,53 @@ const Home = () => {
           type="number"
           name="maxPrice"
           placeholder="Max Price"
-          className="p-2 border rounded"
+          className="p-2 border rounded w-full"
           value={filters.maxPrice}
           onChange={handleChange}
         />
-      </div>
+      </motion.div>
 
       {/* Car Grid */}
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {cars.length > 0 ? (
-          cars.map((car) => <CarCard key={car.id} car={car} />)
-        ) : (
-          <p className="col-span-full text-center text-gray-500">
-            No cars found.
-          </p>
-        )}
-      </div>
+      {loading ? (
+        <div className="text-center text-blue-600 mt-10 text-xl">
+          Loading cars...
+        </div>
+      ) : error ? (
+        <div className="text-center text-red-500 mt-10 text-lg">{error}</div>
+      ) : cars.length > 0 ? (
+        <motion.div
+          className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+          key={JSON.stringify(cars)}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+        >
+          {cars.map((car) => (
+            <CarCard key={car.id} car={car} />
+          ))}
+        </motion.div>
+      ) : (
+        <p className="text-center text-gray-500 mt-6">No cars found.</p>
+      )}
 
       {/* Pagination Controls */}
-      <div className="flex justify-center mt-8 gap-4">
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-10">
         <button
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          className="w-full sm:w-auto px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
           onClick={() => setCurrentPage((prev) => prev - 1)}
           disabled={currentPage === 1}
         >
           ⬅️ Previous
         </button>
-
         <button
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          className="w-full sm:w-auto px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
           onClick={() => setCurrentPage((prev) => prev + 1)}
           disabled={cars.length < carsPerPage}
         >
           Next ➡️
         </button>
       </div>
-
-      {/* Wishlist Section */}
-      <Wishlist />
-    </div>
+    </motion.div>
   );
 };
 

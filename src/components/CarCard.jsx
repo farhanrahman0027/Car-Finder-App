@@ -29,7 +29,7 @@ const CarCard = ({ car }) => {
 
   return (
     <motion.div
-      className="bg-white shadow-md rounded-lg overflow-hidden relative hover:shadow-xl transition duration-300 cursor-pointer"
+      className="bg-white shadow-md rounded-lg overflow-hidden relative hover:shadow-xl transition duration-300 cursor-pointer dark:bg-gray-800 text-black dark:text-white "
       whileHover={{ scale: 1.03 }}
       onClick={() => navigate(`/car/${car.id}`)}
     >
